@@ -3,7 +3,7 @@ from aoc_utility import *
 input = ingestTextFile("input/day3_input.txt")
 output = 0
 
-specialCharacters = "@#$%&*"
+
 
 def isInbounds(rowIdx, colIdx):
     if rowIdx < 0 or rowIdx > 139:
@@ -22,9 +22,36 @@ def searchForAdjacentNums(SpecialChar_rowIdx, SpecialChar_colIdx, validNumberMap
                 if input[rowIdx][colIdx].isnumeric():
                     validNumberMap[rowIdx][colIdx] = True
 
+                    searchingLeft = True
+                    while searchingLeft:
+                        i = 1
+                        if isInbounds(rowIdx - i, colIdx):
+                            print(input[rowIdx - i][colIdx])
+                            if input[rowIdx - i][colIdx].isnumeric():
+                                validNumberMap[rowIdx - i][colIdx] = True
+                            else:
+                                searchingLeft = False
+                        else:
+                            searchingLeft = False
+                        i += 1
+
+                    searchingRight = True
+                    while searchingRight:
+                        i = 1
+                        if isInbounds(rowIdx + i, colIdx):
+                            print(input[rowIdx + i][colIdx])
+                            if input[rowIdx + i][colIdx].isnumeric():
+                                validNumberMap[rowIdx + i][colIdx] = True
+                            else:
+                                searchingRight = False
+                        else:
+                            searchingRight = False
+                        i += 1
+
     return validNumberMap
 
 validNumberMap = [[False] * len(input[0]) for i in range(len(input))]
+specialCharacters = "@#$%&*"
 
 for rowIdx, line in enumerate(input):
     for colIdx, char in enumerate(line):
@@ -42,11 +69,8 @@ for rowIdx, line in enumerate(input):
         else:
             if readingNumber:
                 readingNumber = False
-                print(number)
-                output += int(number)
+                # print(int(''.join(number)))
+                output += int(''.join(number))
                 number = []
-
-            
-
 
 print("Day 3 - Part 1: " + str(output))
