@@ -21,14 +21,13 @@ def searchForAdjacentNums(SpecialChar_rowIdx, SpecialChar_colIdx, validNumberMap
             if isInbounds(rowIdx, colIdx):
                 if input[rowIdx][colIdx].isnumeric():
                     validNumberMap[rowIdx][colIdx] = True
-
                     searchingLeft = True
+                    
+                    i = 1
                     while searchingLeft:
-                        i = 1
-                        if isInbounds(rowIdx - i, colIdx):
-                            print(input[rowIdx - i][colIdx])
-                            if input[rowIdx - i][colIdx].isnumeric():
-                                validNumberMap[rowIdx - i][colIdx] = True
+                        if isInbounds(rowIdx, colIdx - i):
+                            if input[rowIdx][colIdx - i].isnumeric():
+                                validNumberMap[rowIdx][colIdx - i] = True
                             else:
                                 searchingLeft = False
                         else:
@@ -36,12 +35,12 @@ def searchForAdjacentNums(SpecialChar_rowIdx, SpecialChar_colIdx, validNumberMap
                         i += 1
 
                     searchingRight = True
+        
+                    i = 1
                     while searchingRight:
-                        i = 1
-                        if isInbounds(rowIdx + i, colIdx):
-                            print(input[rowIdx + i][colIdx])
-                            if input[rowIdx + i][colIdx].isnumeric():
-                                validNumberMap[rowIdx + i][colIdx] = True
+                        if isInbounds(rowIdx, colIdx + i):
+                            if input[rowIdx][colIdx + i].isnumeric():
+                                validNumberMap[rowIdx][colIdx + i] = True
                             else:
                                 searchingRight = False
                         else:
@@ -51,7 +50,7 @@ def searchForAdjacentNums(SpecialChar_rowIdx, SpecialChar_colIdx, validNumberMap
     return validNumberMap
 
 validNumberMap = [[False] * len(input[0]) for i in range(len(input))]
-specialCharacters = "@#$%&*"
+specialCharacters = "@#$%&*/+=-"
 
 for rowIdx, line in enumerate(input):
     for colIdx, char in enumerate(line):
@@ -69,7 +68,6 @@ for rowIdx, line in enumerate(input):
         else:
             if readingNumber:
                 readingNumber = False
-                # print(int(''.join(number)))
                 output += int(''.join(number))
                 number = []
 
