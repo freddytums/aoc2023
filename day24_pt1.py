@@ -5,7 +5,7 @@ import math
 
 debug = False
 
-input = ingestTextFile(("input/day4_input.txt", "input/day4_test_input.txt") [debug])
+input = ingestTextFile(("input/day24_input.txt", "input/day24_test_input.txt") [debug])
 output = 0
 
 min = (200000000000000, 7) [debug]
