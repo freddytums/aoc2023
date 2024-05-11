@@ -72,4 +72,4 @@ for idx, data in enumerate(input):
                     if isInFuture(b.x_vel, b.x_pos, x, b.y_vel, b.y_pos, y):
                         output += 1
                 
-print("Day 4 - Part 1: " + str(output))
+print("Day 24 - Part 1: " + str(output))
