@@ -54,4 +54,4 @@ for i in range(len(a.race)):
 
     output *= count
 
-print("Day 6 - Part 1: " + str(output))
+print("Day 6 - Part 2: " + str(output))
