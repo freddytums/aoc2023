@@ -1,8 +1,8 @@
 from aoc_utility import *
 import os
 
-test = True
-debug = True
+test = False
+debug = False
 
 input = ingestTextFile(("input/day5_input.txt", "input/day5_test_input.txt")[test])
 output = 0
@@ -68,59 +68,61 @@ for mapSet in almanacMaps:
                 print("Range: ", str(map.range))
 
                 print("\n")
-
-            if seed.seed_range_start < map.source_range_start:
-                if seed.seed_range_end >= map.source_range_start and seed.seed_range_end <= map.source_range_end:
-                    if debug: print("---seed range below map range---")
-                    # --|seed_range|-----
-                    # ------|map_range|--
-                    if debug: print([seed.seed_range_start, (map.source_range_start - 1) - seed.seed_range_start + 1])
-                    if debug: print([map.destination_range_start, seed.seed_range_end - map.source_range_start + 1])
-                    seeds.append([seed.seed_range_start, (map.source_range_start - 1) - seed.seed_range_start + 1])
-                    seedUsed.append(False)
-                    newSeeds.append([map.destination_range_start, seed.seed_range_end - map.source_range_start + 1])
-                    seedUsed[idx] = True
-                elif seed.seed_range_end > map.source_range_end:
-                    if debug: print("seed range eats map range")
-                    if debug: print([seed.seed_range_start, (map.source_range_start - 1) - seed.seed_range_start + 1])
-                    if debug: print([map.destination_range_start, map.range])
-                    if debug: print([map.source_range_end + 1, (seed.seed_range_end - (map.source_range_end + 1) + 1)])
-                    seeds.append([seed.seed_range_start, (map.source_range_start - 1) - seed.seed_range_start + 1])
-                    seedUsed.append(False)
-                    newSeeds.append([map.destination_range_start, map.range])
-                    seedUsed[idx] = True
-                    seeds.append([map.source_range_end + 1, (seed.seed_range_end - (map.source_range_end + 1) + 1)])
-                    seedUsed.append(False)
+                print("Seed Used:")
+                print(seedUsed[idx])
+            if not seedUsed[idx]:
+                if seed.seed_range_start < map.source_range_start:
+                    if seed.seed_range_end >= map.source_range_start and seed.seed_range_end <= map.source_range_end:
+                        if debug: print("---seed range below map range---")
+                        # --|seed_range|-----
+                        # ------|map_range|--
+                        if debug: print([seed.seed_range_start, (map.source_range_start - 1) - seed.seed_range_start + 1])
+                        if debug: print([map.destination_range_start, seed.seed_range_end - map.source_range_start + 1])
+                        seeds.append([seed.seed_range_start, (map.source_range_start - 1) - seed.seed_range_start + 1])
+                        seedUsed.append(False)
+                        newSeeds.append([map.destination_range_start, seed.seed_range_end - map.source_range_start + 1])
+                        seedUsed[idx] = True
+                    elif seed.seed_range_end > map.source_range_end:
+                        if debug: print("seed range eats map range")
+                        if debug: print([seed.seed_range_start, (map.source_range_start - 1) - seed.seed_range_start + 1])
+                        if debug: print([map.destination_range_start, map.range])
+                        if debug: print([map.source_range_end + 1, (seed.seed_range_end - (map.source_range_end + 1) + 1)])
+                        seeds.append([seed.seed_range_start, (map.source_range_start - 1) - seed.seed_range_start + 1])
+                        seedUsed.append(False)
+                        newSeeds.append([map.destination_range_start, map.range])
+                        seedUsed[idx] = True
+                        seeds.append([map.source_range_end + 1, (seed.seed_range_end - (map.source_range_end + 1) + 1)])
+                        seedUsed.append(False)
+                    else:
+                        if debug: print("---whole lotta nothin!")
+                        # nothing done, append and continue
+                        # newSeeds.append([seed.seed_range_start, seed.range])
+                elif seed.seed_range_start >= map.source_range_start:
+                    if seed.seed_range_end <= map.source_range_end:
+                        if debug: print("---seed range in map range---")
+                        # ----|seed_range|------
+                        # ----|map_range...|----
+                        if debug: print([map.destination_range_start + (seed.seed_range_start - map.source_range_start), seed.range])
+                        newSeeds.append([map.destination_range_start + (seed.seed_range_start - map.source_range_start), seed.range])
+                        seedUsed[idx] = True
+                    elif seed.seed_range_end > map.source_range_end and seed.seed_range_start <= map.source_range_end:
+                        if debug: print("---seed range above map range---")
+                        # --|seed_range...|--
+                        # --|map_range|------
+                        if debug: print([map.destination_range_start + (seed.seed_range_start - map.source_range_start), (map.source_range_end - seed.seed_range_start + 1)])
+                        if debug: print([map.source_range_end + 1, (seed.seed_range_end - (map.source_range_end + 1) + 1)])
+                        newSeeds.append([map.destination_range_start + (seed.seed_range_start - map.source_range_start), (map.source_range_end - seed.seed_range_start + 1)])
+                        seedUsed[idx] = True
+                        seeds.append([map.source_range_end + 1, (seed.seed_range_end - (map.source_range_end + 1) + 1)])
+                        seedUsed.append(False)
+                    else:
+                        if debug: print("---whole lotta nothin!")
+                        # nothing done, append and continue
+                        # newSeeds.append([seed.seed_range_start, seed.range])
                 else:
                     if debug: print("---whole lotta nothin!")
                     # nothing done, append and continue
                     # newSeeds.append([seed.seed_range_start, seed.range])
-            elif seed.seed_range_start >= map.source_range_start:
-                if seed.seed_range_end <= map.source_range_end:
-                    if debug: print("---seed range in map range---")
-                    # ----|seed_range|------
-                    # ----|map_range...|----
-                    if debug: print([map.destination_range_start + (seed.seed_range_start - map.source_range_start), seed.range])
-                    newSeeds.append([map.destination_range_start + (seed.seed_range_start - map.source_range_start), seed.range])
-                    seedUsed[idx] = True
-                elif seed.seed_range_end > map.source_range_end and seed.seed_range_start <= map.source_range_end:
-                    if debug: print("---seed range above map range---")
-                    # --|seed_range...|--
-                    # --|map_range|------
-                    if debug: print([map.destination_range_start + (seed.seed_range_start - map.source_range_start), (map.source_range_end - seed.seed_range_start + 1)])
-                    if debug: print([map.source_range_end + 1, (seed.seed_range_end - (map.source_range_end + 1) + 1)])
-                    newSeeds.append([map.destination_range_start + (seed.seed_range_start - map.source_range_start), (map.source_range_end - seed.seed_range_start + 1)])
-                    seedUsed[idx] = True
-                    seeds.append([map.source_range_end + 1, (seed.seed_range_end - (map.source_range_end + 1) + 1)])
-                    seedUsed.append(False)
-                else:
-                    if debug: print("---whole lotta nothin!")
-                    # nothing done, append and continue
-                    # newSeeds.append([seed.seed_range_start, seed.range])
-            else:
-                if debug: print("---whole lotta nothin!")
-                # nothing done, append and continue
-                # newSeeds.append([seed.seed_range_start, seed.range])
 
             # print(seeds)
             # print(newSeeds)
@@ -128,9 +130,10 @@ for mapSet in almanacMaps:
 
     # print(len(newSeeds))
     
-    print(seedUsed)
-    print(seeds)
+    # print(seedUsed)
+    # print(seeds)
     # print(newSeeds)
+
     i = 0
     for idx, seed in enumerate(seeds):
         i += seed[1]
@@ -143,11 +146,11 @@ for mapSet in almanacMaps:
 
     print("Total Seeds:")
     print(i)
-    print("Old Seeds:")
-    print(seeds)
+    # print("Old Seeds:")
+    # print(seeds)
     seeds = newSeeds.copy()
-    print("New Seeds:")
-    print(seeds)
+    # print("New Seeds:")
+    # print(seeds)
     os.system("pause")
 
 output = min(seeds)
