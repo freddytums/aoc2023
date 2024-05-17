@@ -14,7 +14,7 @@ class Node():
         self.thisNode = nodeString.split()[0]
         self.leftNode = nodeString[7:10]
         self.rightNode = nodeString[12:15]
-        
+
 nodeDict = {}
 for nodeString in nodeStrings:
     node = Node(nodeString)

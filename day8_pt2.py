@@ -1,5 +1,7 @@
 from aoc_utility import *
 
+import math
+
 debug = False
 test = False
 
@@ -29,23 +31,22 @@ for nodeString in nodeStrings:
     nodeDict[node.thisNode] = {'L':node.leftNode, 'R':node.rightNode}
 
 goal = 'Z'
-foundGoal = False
-while not foundGoal:
-    for step in steps:
-        for idx, currentNode in enumerate(currentNodes):
-            currentNodes[idx] = nodeDict[currentNode][step]
-        output += 1
+goalFrequency = [0] * len(currentNodes) 
+for idx, currentNode in enumerate(currentNodes):
+    foundGoal = False
+    foundGoalAgain = False
+    while not foundGoal or not foundGoalAgain:
+        for step in steps:
+            currentNodes[idx] = nodeDict[currentNodes[idx]][step]
+            if foundGoal:
+                goalFrequency[idx] += 1
+                if currentNodes[idx][2] == goal:
+                    foundGoalAgain = True
+                    break
 
-        allGoal = True
-        for currentNode in currentNodes:
-            if currentNode[2] != goal:
-               allGoal = False
+            if (currentNodes[idx][2] == goal) and not foundGoal:    
+                foundGoal = True
 
-        # print(currentNodes)
-
-        if allGoal:
-            # print('All Found!')
-            foundGoal = True
-            break
+output = math.lcm(*goalFrequency)
 
 print("Day 8 - Part 2: " + str(output))
