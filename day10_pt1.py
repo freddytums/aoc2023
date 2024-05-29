@@ -32,6 +32,17 @@ nav = {
 def exitDirection(enterDirection: str, pipeCharacter: str):
     return nav[enterDirection][pipeCharacter]
 
+def shiftPos(exitDirection: str, pos: list):
+    match exitDirection:
+        case 'U':
+            return [pos[0], pos[1] - 1]
+        case 'D':
+            return [pos[0], pos[1] + 1]
+        case 'L':
+            return [pos[0] - 1, pos[1]]
+        case 'R':
+            return [pos[0] + 1, pos[1]]
+
 def findStart(input):
     for rowIdx, line in enumerate(input):
         for colIdx, char in enumerate(line):
@@ -51,9 +62,18 @@ def getStartingDirection(start, input):
         return 'L'
 
 pos = findStart(input)
-start_direction = getStartingDirection(pos, input)
+direction = getStartingDirection(pos, input)
 
-while input[pos[1]][pos[0]] != 'S':
-    pass
+steps = 0
+while True:
+    steps += 1
+    pos = shiftPos(direction, pos)
+
+    if input[pos[1]][pos[0]] == 'S':
+        break
+
+    direction = exitDirection(direction, input[pos[1]][pos[0]])
+
+output = steps / 2
 
 print("Day 10 - Part 1: " + str(output))
